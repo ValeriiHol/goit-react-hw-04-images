@@ -74,3 +74,9 @@ export class App extends Component {
 }
 
 export default App;
+
+
+// npm i notiflix
+// npm install axios
+// npm install react-loader-spinner --save
+

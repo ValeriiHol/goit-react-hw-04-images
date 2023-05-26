@@ -1,50 +1,44 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 import PropTypes from 'prop-types';
 import css from './ImageGalleryItem.module.css';
 
 import Modal from 'components/Modal/Modal';
 import { Controls } from 'components/Controls/Controls';
 
-class ImageGalleryItem extends Component {
-  state = {
-    shownModal: false,
-    index: this.props.index,
+function ImageGalleryItem({ image, index, images }) {
+  const [shownModal, setShownModal] = useState(false);
+  const [indexSt, setIndex] = useState(index);
+
+  const onModal = () => {
+    setShownModal(prevState => !prevState);
   };
 
-  onModal = () => {
-    this.setState(({ shownModal }) => ({ shownModal: !shownModal }));
+  const changeIndex = value => {
+    setIndex(prevState => prevState + value);
   };
 
-  changeIndex = value => {
-    this.setState(state => ({ index: state.index + value }));
-  };
+  const totalItems = images.length;
+  const currentItem = images[indexSt];
 
-  render() {
-    const { image, images } = this.props;
-    const { index, shownModal } = this.state;
-    const totalItems = images.length;
-    const currentItem = images[index];
-
-    return (
-      <li onClick={this.onModal} className={css.gallery_item}>
-        <img
-          className={css.gallery_item_img}
-          src={image.webformatURL}
-          alt={image.tags}
-        />
-        {shownModal && (
-          <Modal onClose={this.onModal}>
-            <img src={currentItem.largeImageURL} alt={currentItem.tags} />
-            <Controls
-              current={index + 1}
-              total={totalItems}
-              onChange={this.changeIndex}
-            />
-          </Modal>
-        )}
-      </li>
-    );
-  }
+  return (
+    <li onClick={onModal} className={css.gallery_item}>
+      <img
+        className={css.gallery_item_img}
+        src={image.webformatURL}
+        alt={image.tags}
+      />
+      {shownModal && (
+        <Modal onClose={onModal}>
+          <img src={currentItem.largeImageURL} alt={currentItem.tags} />
+          <Controls
+            current={index + 1}
+            total={totalItems}
+            onChange={changeIndex}
+          />
+        </Modal>
+      )}
+    </li>
+  );
 }
 
 ImageGalleryItem.propTypes = {
